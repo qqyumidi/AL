@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        applicationId "com.corn.githooks"
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        buildConfigField "boolean", "INNER_TEST", "true"
+        buildConfigField "String", "MODULE_NAME", "\"${project.name}\""
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+        }
+
+        debug {
+
+        }
+    }
+
+
+    flavorDimensions "default"
+
+    productFlavors {
+        demo {
+            applicationIdSuffix "demo"
+        }
+
+        full {
+            applicationIdSuffix "full"
+        }
+    }
+
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    //implementation 'com.android.support:appcompat-v7:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
+    implementation "io.reactivex.rxjava3:rxjava:3.0.0-RC0"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+
+}
+
+
+apply plugin: 'Git-Hooks-Plugin'
+
+gitHooks {
+
+    gitRootPath rootProject.rootDir.absolutePath
+
+    commit {
+        // git commit 强制规范
+        regex "^(新增：|特性：|：合并：|Lint：|Sonar：|优化：|Test：|合版：|发版：|Fix：|依赖库：|解决冲突：)"
+        // 对应提交规范具体说明文档
+        docUrl "http://xxxx"
+
+        // git commit 必须使用公司邮箱
+        //emailSuffix "@qq.com"
+
+    }
+
+}
